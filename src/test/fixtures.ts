@@ -1,47 +1,92 @@
 import type { Element } from '@/data/schema/element.schema';
+import type { Isotope } from '@/data/schema/isotope.schema';
+import type { Reference } from '@/data/schema/reference.schema';
 
 /**
- * Elemento SINTÉTICO usado apenas em testes de infraestrutura.
- * Não representa nenhum elemento real nem dado científico.
+ * Dados SINTÉTICOS usados apenas em testes de infraestrutura.
+ * Não representam nenhum elemento real nem dado científico: símbolo "Tt",
+ * valores fictícios e fonte inexistente.
  */
+
+export const FIXTURE_REF = 'fonte-de-teste';
+const citations = [{ ref: FIXTURE_REF }];
+
+export function makeFixtureReference(overrides: Partial<Reference> = {}): Reference {
+  return {
+    id: FIXTURE_REF,
+    kind: 'livro',
+    title: 'Fonte sintética de teste',
+    tier: 'primaria',
+    usage: 'apenas-citacao',
+    license: { status: 'nao-aplicavel' },
+    ...overrides,
+  };
+}
+
+export function makeFixtureIsotope(overrides: Partial<Isotope> = {}): Isotope {
+  return {
+    massNumber: 4,
+    origin: 'primordial',
+    selection: 'natural',
+    atomicMass: {
+      status: 'valor',
+      value: 4,
+      unit: 'u',
+      provenance: 'experimental',
+      citations,
+    },
+    halfLife: { status: 'estavel', provenance: 'experimental', citations },
+    decayModes: [],
+    citations,
+    ...overrides,
+  };
+}
+
 export function makeFixtureElement(overrides: Partial<Element> = {}): Element {
-  const sourceIds = ['fonte-de-teste'];
   return {
     atomicNumber: 2,
     symbol: 'Tt',
-    name: 'Teste',
+    names: { pt: 'Teste', en: 'Test' },
     family: 'gases-nobres',
-    group: 18,
-    period: 1,
-    block: 's',
-    tablePosition: { row: 1, column: 18 },
-    atomicMass: { value: 1, kind: 'convencional', unit: 'u', sourceIds },
-    electronConfiguration: { full: '1s2', condensed: '1s2', shells: [2], sourceIds },
-    phase: { value: 'gasoso', sourceIds },
+    classification: { status: 'estabelecida' },
+    atomicMass: { form: 'valor', value: 4, unit: 'u', citations },
+    electronConfiguration: {
+      status: 'valor',
+      subshells: [{ n: 1, l: 's', electrons: 2 }],
+      provenance: 'experimental',
+      citations,
+    },
+    phase: {
+      status: 'valor',
+      value: 'gasoso',
+      conditions: { temperatureK: 298.15, pressureKPa: 100 },
+      provenance: 'experimental',
+      citations,
+    },
     physical: {
-      density: { value: 1, unit: 'g/cm³', isEstimated: false, sourceIds },
-      meltingPoint: null,
-      boilingPoint: null,
+      density: { status: 'valor', value: 1, unit: 'g/cm³', provenance: 'experimental', citations },
+      meltingPoint: { status: 'nao-aplicavel', reason: 'Valor fictício de teste.' },
+      boilingPoint: { status: 'desconhecido' },
     },
     chemical: {
-      electronegativity: null,
-      atomicRadius: null,
-      firstIonizationEnergy: null,
-      oxidationStates: { values: [0], sourceIds },
-    },
-    discovery: { year: null, discoverers: [], sourceIds },
-    etymology: { text: 'Texto de teste.', sourceIds },
-    summary: { text: 'Resumo de teste.', sourceIds },
-    uses: [{ text: 'Uso de teste.', sourceIds }],
-    references: [
-      {
-        id: 'fonte-de-teste',
-        kind: 'site-institucional',
-        title: 'Fonte sintética de teste',
-        url: 'https://example.org/',
-        accessedAt: '2026-01-01',
+      electronegativityPauling: { status: 'desconhecido' },
+      covalentRadius: { status: 'desconhecido' },
+      vanDerWaalsRadius: { status: 'desconhecido' },
+      firstIonizationEnergy: { status: 'desconhecido' },
+      electronAffinity: { status: 'desconhecido' },
+      oxidationStates: {
+        status: 'valor',
+        states: [{ value: 0, prevalence: 'comum' }],
+        provenance: 'experimental',
+        citations,
       },
-    ],
+    },
+    appearance: { text: 'Aparência de teste.', citations },
+    discovery: { year: null, discoverers: [], citations },
+    etymology: { text: 'Etimologia de teste.', citations },
+    summary: { text: 'Resumo de teste.', citations },
+    uses: [{ text: 'Uso de teste.', citations }],
+    isotopes: [makeFixtureIsotope()],
     ...overrides,
   };
 }

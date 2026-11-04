@@ -2,7 +2,7 @@
 
 Atlas digital e interativo da tabela periódica, com informações científicas sobre os 118 elementos químicos, suas propriedades físicas e químicas e visualizações atômicas.
 
-> **Status:** Etapa 1 concluída (fundação do projeto). A tabela interativa, as páginas dos elementos, os dados científicos e o visualizador atômico ainda serão implementados.
+> **Status:** Etapa 2.2 concluída (convenções científicas, layout, schema e catálogo de dados). Ainda **não há elementos cadastrados**. A tabela interativa, as páginas completas dos elementos, a coleta dos dados e o visualizador atômico serão implementados nas próximas etapas.
 
 ## Visão geral
 
@@ -11,6 +11,8 @@ Atlas digital e interativo da tabela periódica, com informações científicas 
 - Visualizador atômico interativo, com modelo didático de camadas eletrônicas (a implementar).
 - Dados armazenados localmente em JSON, sem back-end.
 - Referências científicas registradas nos dados e exibidas nas páginas.
+
+As decisões científicas, as convenções do projeto e as decisões de interface estão em [docs/convencoes-cientificas.md](docs/convencoes-cientificas.md).
 
 ## Requisitos
 
@@ -51,18 +53,23 @@ npm install
 ## Estrutura do projeto
 
 ```
+docs/
+└── convencoes-cientificas.md   # convenções científicas e decisões de interface
 src/
-├── app/               # rotas e caminhos de navegação
+├── app/                # rotas e caminhos de navegação
 ├── components/
-│   └── layout/        # estrutura global (cabeçalho, rodapé, layout)
+│   └── layout/         # estrutura global (cabeçalho, rodapé, layout)
 ├── data/
-│   ├── elements/      # um JSON por família de elementos
-│   ├── schema/        # schema Zod e tipos centralizados
-│   ├── catalog.ts     # carrega, valida e consulta o catálogo
-│   └── families.ts    # famílias de elementos
-├── pages/             # páginas (tabela, elemento, 404)
-├── styles/            # tokens de design e estilos base
-└── test/              # configuração e fixtures de teste
+│   ├── elements/       # um JSON por família de elementos
+│   ├── schema/         # schemas Zod: comum, referência, isótopo e elemento
+│   ├── catalog.ts      # carrega, valida e consulta o catálogo
+│   ├── derive.ts       # camadas e configurações derivadas das subcamadas
+│   ├── families.ts     # famílias, marcadores e pertinência canônica
+│   ├── layout.ts       # posição dos 118 elementos na tabela
+│   └── references.json # registro global de referências
+├── pages/              # páginas (tabela, elemento, 404)
+├── styles/             # tokens de design e estilos base
+└── test/               # configuração e fixtures sintéticas de teste
 ```
 
 ### Rotas
@@ -75,28 +82,41 @@ src/
 
 ## Dados
 
+### Famílias
+
 Os elementos ficam em `src/data/elements/<familia>.json`, um arquivo por família. O **nome do arquivo é o id da família** (veja [src/data/families.ts](src/data/families.ts)):
 
-`metais-alcalinos`, `metais-alcalino-terrosos`, `metais-de-transicao`, `metais-de-pos-transicao`, `semimetais`, `nao-metais`, `halogenios`, `gases-nobres`, `lantanideos`, `actinideos`.
+`metais-alcalinos`, `metais-alcalino-terrosos`, `metais-do-bloco-d`, `metais-de-pos-transicao`, `semimetais`, `nao-metais`, `halogenios`, `gases-nobres`, `lantanideos`, `actinideos`.
 
-Cada arquivo é um array de elementos que deve obedecer ao schema em [src/data/schema/element.schema.ts](src/data/schema/element.schema.ts). A validação garante, entre outras regras:
+Família química e posição na tabela são independentes. A posição (grupo, período, bloco, linha e coluna) fica **apenas** em [src/data/layout.ts](src/data/layout.ts), que adota o grupo 3 como Sc, Y, Lu e Lr e um bloco f de 14 colunas. Isso é uma **convenção do projeto**, não uma norma da IUPAC.
 
-- número atômico entre 1 e 118, sem repetição de número ou símbolo;
-- a família declarada no elemento coincide com a do arquivo;
-- a soma dos elétrons por camada é igual ao número atômico;
-- **todo dado científico cita ao menos uma referência**, e cada `sourceIds` aponta para uma referência declarada em `references` do próprio elemento;
-- valores estimados (ex.: elementos superpesados) são marcados com `isEstimated`, e valores desconhecidos são `null`.
+### Schema
 
-Os arquivos de família estão vazios (`[]`) nesta etapa. O catálogo é validado ao ser carregado; se um JSON estiver inconsistente, a aplicação e os testes falham com a lista de problemas. Para validar apenas os dados: `npm run validate:data`.
+O schema do elemento está em [src/data/schema/element.schema.ts](src/data/schema/element.schema.ts). Principais regras:
+
+- **Estados de cada dado:** `valor`, `desconhecido` ou `nao-aplicavel`. Valores têm proveniência (`experimental`, `calculado` ou `estimado`), unidade padronizada, condições de medição e citações.
+- **Rastreabilidade:** cada propriedade cita `{ ref, locator? }`, apontando para o registro global em [src/data/references.json](src/data/references.json).
+- **Massa atômica** em três formas: valor, intervalo ou número de massa.
+- **Configuração eletrônica** por subcamadas; camadas e strings são derivadas em [src/data/derive.ts](src/data/derive.ts).
+- **Isótopos:** todos os naturais conhecidos (primordiais, de cadeias de decaimento e cosmogênicos), sem limite de quantidade; elementos sem isótopos naturais têm até três artificiais representativos. O de maior meia-vida confirmada sempre é incluído.
+- **Classificação** `estabelecida` ou `predita`, com nota e citações obrigatórias para elementos de Z ≥ 99.
+- Tier 1 (campos obrigatórios, com valor possivelmente desconhecido) e Tier 2 (opcional, só com dado confiável).
+
+O catálogo é validado ao ser carregado: símbolo e número atômico precisam coincidir com o layout, a família com a pertinência canônica, e toda citação com uma referência registrada. Se algo estiver inconsistente, a aplicação e os testes falham com a lista de problemas. Para validar apenas os dados: `npm run validate:data`.
+
+### Referências e licenças
+
+A Wikipédia não pode ser citada. Dados de uma base científica só podem ser incorporados depois que a licença e as condições de atribuição forem verificadas e registradas na referência. Veja [docs/convencoes-cientificas.md](docs/convencoes-cientificas.md#8-licenças-e-atribuição-das-bases-científicas).
 
 ## Design
 
-Os tokens visuais (cores, tipografia, espaçamento, raios, sombras e movimento) ficam em [src/styles/tokens.css](src/styles/tokens.css). Cada família de elementos tem um token de cor próprio (`--color-family-<id>`). Estilos de componentes devem usar apenas esses tokens.
+Os tokens visuais (cores, tipografia, espaçamento, raios, sombras e movimento) ficam em [src/styles/tokens.css](src/styles/tokens.css). Cada família tem um token de cor próprio (`--color-family-<id>`) e um marcador geométrico exclusivo, para que a cor não seja o único meio de identificação. Estilos de componentes devem usar apenas esses tokens.
 
 ## Roadmap
 
-1. ✅ Fundação do projeto (esta etapa).
-2. Cadastro dos dados científicos dos 118 elementos, com referências.
-3. Tabela periódica interativa.
-4. Página completa de cada elemento.
-5. Visualizador atômico (modelo didático de camadas eletrônicas).
+1. ✅ Fundação do projeto.
+2. ✅ Convenções científicas, layout, schema e catálogo (Etapa 2.2). Ainda sem dados reais.
+3. Verificação de licenças e coleta dos dados científicos dos 118 elementos, com referências.
+4. Tabela periódica interativa.
+5. Página completa de cada elemento.
+6. Visualizador atômico (modelo didático de camadas eletrônicas).

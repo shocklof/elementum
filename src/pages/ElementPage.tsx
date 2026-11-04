@@ -23,7 +23,7 @@ export function ElementPage() {
   return (
     <section className="page" aria-labelledby="titulo-elemento">
       <h1 id="titulo-elemento" className="page__title">
-        {element.name} ({element.symbol})
+        {element.names.pt} ({element.symbol})
       </h1>
       <div className="panel">
         <h2 className="panel__title">Em construção</h2>

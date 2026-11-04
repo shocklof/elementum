@@ -33,7 +33,7 @@
   /* Famílias de elementos (uma cor por família) */
   --color-family-metais-alcalinos: #f87171;
   --color-family-metais-alcalino-terrosos: #fb923c;
-  --color-family-metais-de-transicao: #fbbf24;
+  --color-family-metais-do-bloco-d: #fbbf24;
   --color-family-metais-de-pos-transicao: #a3e635;
   --color-family-semimetais: #34d399;
   --color-family-nao-metais: #22d3ee;
@@ -41,6 +41,21 @@
   --color-family-gases-nobres: #a78bfa;
   --color-family-lantanideos: #f472b6;
   --color-family-actinideos: #e879f9;
+
+  /* Estados de dados e classificação (a interface da tabela os consome nas próximas etapas) */
+  --color-unknown: var(--color-text-subtle);
+  --color-unknown-border: var(--color-border-strong);
+  --border-predicted-style: dashed;
+  --hatch-predicted: repeating-linear-gradient(
+    135deg,
+    transparent 0 5px,
+    rgb(255 255 255 / 9%) 5px 6px
+  );
+  --opacity-dimmed: 0.35;
+
+  /* Marcadores geométricos das famílias */
+  --marker-size: 0.5rem;
+  --marker-size-lg: 0.875rem;
 
   /* Tipografia */
   --font-sans:
