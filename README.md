@@ -120,3 +120,9 @@ Os tokens visuais (cores, tipografia, espaçamento, raios, sombras e movimento) 
 4. Tabela periódica interativa.
 5. Página completa de cada elemento.
 6. Visualizador atômico (modelo didático de camadas eletrônicas).
+
+## Licença
+
+O código-fonte original do Elementum está sob a [Licença MIT](LICENSE), Copyright (c) 2026 shocklof.
+
+Dados científicos de terceiros que venham a ser incorporados ao projeto podem ter licenças e condições próprias de uso, redistribuição e atribuição. A licença MIT **não** se aplica a eles, e a licença do código não substitui nem altera as condições de redistribuição das fontes científicas. Cada base é registrada, com sua licença verificada, antes de qualquer incorporação (veja [docs/convencoes-cientificas.md](docs/convencoes-cientificas.md#8-licenças-e-atribuição-das-bases-científicas)). Até o momento, nenhum dado científico foi incorporado.
