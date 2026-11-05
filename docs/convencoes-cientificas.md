@@ -15,14 +15,16 @@ Data da consolidação: 2026-11-04 (Etapa 2.1 aprovada; implementação na Etapa
 3. **[CONVENÇÃO]** Dados desconhecidos e não aplicáveis são sempre explicitados (`desconhecido`, `nao-aplicavel`). Nunca se usa `null` nem um valor inventado.
 4. **[CONVENÇÃO]** Nenhum dado de uma base científica é incorporado enquanto sua licença e as condições de atribuição não forem verificadas e registradas **e** a redistribuição não for confirmada como permitida (ver seção 8). A licença do código (MIT) é independente das licenças dos dados.
 5. **[CONVENÇÃO]** Família química e posição na tabela são independentes (seções 2 e 3).
+6. **[CONVENÇÃO]** Consultar e citar uma fonte não implica poder redistribuir seus dados. Ausência de autorização encontrada não equivale a proibição expressa, mas também não autoriza a incorporação (seção 8).
 
 ## 2. Classificação química (famílias)
 
 ### Fatos
 
-- **[CIÊNCIA]** A IUPAC define nomes coletivos para alguns grupos: metais alcalinos (grupo 1, exceto H), alcalino-terrosos (grupo 2), halogênios (grupo 17), gases nobres (grupo 18), lantanoides (La–Lu) e actinoides (Ac–Lr). _Verificação: via fontes secundárias; o texto do Red Book 2005 não pôde ser lido diretamente._
-- **[CIÊNCIA]** A IUPAC não define "metais de pós-transição", "metaloides" nem "não metais". _Verificação: via fonte secundária._
-- **[CIÊNCIA]** O Red Book considera o bloco d como os grupos 3–12, "embora o grupo 12 nem sempre seja incluído". O Gold Book afirma que o grupo 12 não satisfaz sua definição de elemento de transição. _Verificação: via fonte secundária._
+- **[CIÊNCIA]** **Definições apresentadas pelo Red Book 2005 (seção IR-3.5):** os grupos são numerados de 1 a 18; os elementos dos grupos 1, 2 e 13–18 (exceto o hidrogênio) são "elementos do grupo principal"; os elementos dos grupos 3–12 são os elementos do bloco d; e os seguintes nomes coletivos são "aprovados pela IUPAC": metais alcalinos (Li–Fr), alcalino-terrosos (Be–Ra), pnictogênios, calcogênios, halogênios, gases nobres (He–Rn, sem o Og, porque a publicação é de 2005), lantanoides (La–Lu), metais terras raras (Sc, Y e os lantanoides) e actinoides (Ac–Lr). _Verificação: lido diretamente no PDF da IUPAC._
+- **[CIÊNCIA]** **Convenções e agrupamentos apenas mencionados pelo Red Book:** os elementos do bloco d "também são comumente chamados" de elementos de transição, "embora os elementos do grupo 12 nem sempre sejam incluídos"; os elementos do bloco f "às vezes" são chamados de elementos de transição interna; o lantânio é incluído entre os lantanoides por uso comum; e os grupos podem, se apropriado, ser nomeados pelo primeiro elemento (por exemplo, o grupo do boro). _Verificação: lido diretamente._
+- **[CIÊNCIA]** **Conceitos que o Red Book não define:** "metaloides", "metais de pós-transição" e "não metais" como categorias de elementos. Na busca no texto completo, "metaloide" e "pós-transição" não aparecem; "não metal" e "não metálico" aparecem apenas de passagem (em um trecho histórico sobre nomenclatura e em uma frase sobre números de oxidação) e "semimetais", só em uma referência bibliográfica. Isso **não significa** que a IUPAC não reconheça esses conceitos em outras publicações: o Gold Book, por exemplo, não foi lido (verificação pendente).
+- **[CIÊNCIA]** Segundo fonte secundária, o Gold Book afirma que o grupo 12 não satisfaz sua definição de elemento de transição. _Verificação: fonte secundária; leitura direta do Gold Book pendente._
 - **[CIÊNCIA]** Os seis elementos mais citados como metaloides são B, Si, Ge, As, Sb e Te (Vernon, 2013, _J. Chem. Educ._ 90, 1703; resumos lidos, artigo não lido).
 
 ### Convenções adotadas
@@ -132,9 +134,9 @@ Os valores são sempre armazenados nestas unidades. A conversão para exibição
 
 ### Condições de medição
 
-- **[CIÊNCIA]** **100 kPa (10⁵ Pa = 1 bar)** é a pressão padrão p° recomendada pela IUPAC (_Green Book_, 3ª ed.). _Verificação: texto lido no PDF da IUPAC._
-- **[CONVENÇÃO]** **298,15 K é uma convenção de referência do Elementum, não uma temperatura padrão universal da IUPAC.** A IUPAC não inclui a temperatura na definição de estado padrão (o _Green Book_ fala em "temperatura escolhida"); 298,15 K é a temperatura usual das tabelas termoquímicas. Não confundir com as "condições padrão para gases" (273,15 K e 10⁵ Pa), que o projeto não usa.
-- Estado físico e densidade usam, como referência, **298,15 K e 100 kPa** (`REFERENCE_CONDITIONS`). O campo `phase.conditions` é obrigatório; propriedades como densidade e pontos de fusão e ebulição aceitam `conditions` opcional.
+- **[CIÊNCIA]** **100 kPa (10⁵ Pa = 1 bar)** é a pressão padrão p° recomendada pela IUPAC (_Green Book_, 3ª ed.). _Verificação: passagem lida no PDF da IUPAC._
+- **[CONVENÇÃO]** **298,15 K é uma convenção de referência do Elementum, não uma temperatura padrão universal da IUPAC.** No _Green Book_ (3ª ed.), o estado padrão é definido à pressão padrão p°, sem fixar uma temperatura (as tabelas usam a "temperatura escolhida"); 298,15 K é a temperatura usual das tabelas termoquímicas. Não confundir com as "condições padrão para gases" (273,15 K e 100 kPa), que o projeto não usa.
+- Estado físico e densidade usam, como referência, **298,15 K e 100 kPa** (`REFERENCE_CONDITIONS`). O campo `phase.conditions` é obrigatório; propriedades como densidade e pontos de fusão e ebulição aceitam `conditions` opcional. Quando um valor depender de condições específicas (temperatura, pressão), elas são registradas em `conditions`.
 
 ### Massa atômica
 
@@ -156,7 +158,7 @@ Três formas, como o CIAAW e a IUPAC as apresentam:
 
 - **Tier 1** (campo obrigatório nos 118; o valor pode ser `desconhecido` ou `nao-aplicavel`): nomes (pt e en), classificação, massa atômica, configuração eletrônica, estado físico, densidade, pontos de fusão e ebulição, eletronegatividade de Pauling, raio covalente, raio de van der Waals, primeira energia de ionização, afinidade eletrônica, estados de oxidação, aparência, descoberta, etimologia, resumo, usos e isótopos.
 - **Tier 2** (opcional, apenas com dado confiável; campo `tier2`): estrutura cristalina, condutividade térmica (`W/(m·K)`), calor específico (`J/(g·K)`), calores de fusão e vaporização (`kJ/mol`) e abundância na crosta (`mg/kg`). As unidades do Tier 2 foram fixadas na Etapa 2.2 e podem ser revistas.
-- **Raios:** raio covalente e raio de van der Waals são propriedades separadas. **[CIÊNCIA]** Cordero et al. (2008) cobre raios covalentes só até Z=96; os demais ficam `desconhecido`. _Verificação: resumo lido._ O **raio de van der Waals continua Tier 1**, mas pode ser `desconhecido`. **[CONVENÇÃO]** Conjuntos de raios de fontes diferentes têm métodos e escalas incompatíveis (compilados, calculados ou derivados de estruturas cristalinas) e **não se misturam num mesmo campo**; valores ausentes não são preenchidos por interpolação sem justificativa científica documentada. A fonte do raio de van der Waals ainda precisa ser definida e depende de licença compatível (seção 8).
+- **Raios:** raio covalente e raio de van der Waals são propriedades separadas. **[CIÊNCIA]** Cordero et al. (2008) cobre raios covalentes só até Z=96; os demais ficam `desconhecido`. _Verificação: resumo lido._ O **raio de van der Waals continua Tier 1**, mas pode ser `desconhecido`. **[CONVENÇÃO]** Conjuntos de raios de fontes diferentes têm métodos e escalas incompatíveis (compilados, calculados ou derivados de estruturas cristalinas) e **não se misturam num mesmo campo** (por exemplo, os de Bondi, Mantina e Alvarez); valores ausentes não são preenchidos por interpolação sem justificativa científica documentada. A fonte do raio de van der Waals ainda não foi definida. Os valores de Alvarez (2013), CC BY-NC 3.0, **não serão incorporados**, porque a restrição não comercial conflita com a política de dados (seção 8).
 - **Estados de oxidação:** vão de −5 a +9, cada um com `prevalence` (`comum`, `raro` ou `condicoes-extremas`). **[CIÊNCIA]** O estado +9 é conhecido só para o cátion [IrO₄]⁺ em fase gasosa (Wang et al., _Nature_ 2014), sem sal isolado; por isso é `condicoes-extremas`. Os limites do schema são faixas de sanidade; cada valor precisa de evidência.
 
 ## 5. Isótopos
@@ -258,27 +260,114 @@ O schema impõe as regras abaixo (`src/data/schema/reference.schema.ts`):
 - Referências `apenas-citacao` não exigem verificação de licença e são aceitas em qualquer estado de redistribuição.
 - Coerência da licença: `permitida` não admite restrições (com restrições, use `condicional`); `condicional` exige ao menos uma restrição ou uma nota explicando a condição; as restrições não se repetem.
 
-**Estado atual:** nenhuma referência foi registrada em `references.json`, e o resultado da verificação de licenças das bases candidatas ainda não foi registrado no projeto. Todas as bases abaixo continuam com registro **pendente**:
+### Conceitos: licença consultada, permissão de redistribuição e condições de uso
 
-| Base                                                           | Uso previsto                         | Licença / atribuição |
-| -------------------------------------------------------------- | ------------------------------------ | -------------------- |
-| CIAAW (pesos atômicos, abundâncias)                            | Massa atômica, composição isotópica  | Pendente             |
-| NUBASE2020 / AME2020                                           | Isótopos, massas, meias-vidas        | Pendente             |
-| ENSDF (NNDC/IAEA)                                              | Verificação de dados nucleares       | Pendente             |
-| NIST Atomic Spectra Database                                   | Configurações, energias de ionização | Pendente             |
-| Fontes de raios, eletronegatividade e pontos de fusão/ebulição | A definir                            | Pendente             |
+**[CONVENÇÃO]** São três coisas distintas, registradas em campos distintos de `license`:
+
+| Conceito                        | Pergunta que responde                                                    | Campos                                                                                | Exemplo                                                           |
+| ------------------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| **Licença consultada**          | Os termos da fonte foram lidos e registrados?                            | `status` (`verificada`, `pendente`, `nao-aplicavel`), `name`, `termsUrl`, `checkedAt` | Termos lidos no site oficial, com a data da leitura.              |
+| **Permissão de redistribuição** | Os dados podem ser redistribuídos no JSON público do projeto?            | `redistribution`                                                                      | `permitida`, `condicional`, `nao-permitida` ou `nao-esclarecida`. |
+| **Condições de uso**            | Sob quais condições (restrições e atribuição) os dados podem ser usados? | `restrictions`, `attribution`, `note`                                                 | Uso educacional; atribuição a autores, título, periódico e DOI.   |
+
+### Política padrão de dados
+
+**[CONVENÇÃO]** Decisões aprovadas, que valem para qualquer fonte:
+
+- Uma fonte pode ser consultada e citada sem que seus dados possam ser redistribuídos.
+- Dados incorporados exigem autorização explícita, ou claramente documentada, de redistribuição (`redistribution: permitida`).
+- Licenças com restrição não comercial, sem derivados ou de compartilhamento pela mesma licença (NC, ND e SA) não entram na política padrão de dados. Fontes com `nao-comercial`, `sem-derivados` ou `compartilhamento-igual` são, no máximo, `condicional` e não são incorporadas sem uma decisão específica documentada.
+- Ausência de autorização não equivale a proibição expressa: a fonte fica `nao-esclarecida`, pode ser consultada e citada, mas não é incorporada até esclarecimento formal.
+- Não se copiam tabelas inteiras sem direitos claros. Quando a incorporação for permitida, preferem-se valores individuais rastreáveis, com `locator` (tabela, página ou entrada).
+
+### Matriz das fontes auditadas
+
+Resultado da auditoria independente da Etapa 2.3B.1 (2026-11-05). Coluna **Ev.** (evidência): **L** = lido diretamente na fonte oficial ou na publicação; **E** = trecho indexado, porque a leitura direta foi bloqueada (HTTP 403 ou desafio anti-robô); **N** = licença não verificada.
+
+| Fonte (obra)                                                                                           | Termos consultados                                                                                                                                                                       | `redistribution`  | `restrictions`                                    | Situação no projeto                                                              | Ev. |
+| ------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | ------------------------------------------------- | -------------------------------------------------------------------------------- | --- |
+| **NUBASE2020**, artigo (Kondev et al., _Chin. Phys. C_ 45, 030001, 2021; doi:10.1088/1674-1137/abddae) | CC BY 3.0, na página da editora (IOPscience). A cópia do PDF hospedada pela IAEA não traz a frase de licença.                                                                            | `permitida`       | nenhuma                                           | **Elegível** para incorporação, com atribuição                                   | L   |
+| **AME2020 (II)**, artigo (Wang et al., _Chin. Phys. C_ 45, 030003, 2021; doi:10.1088/1674-1137/abddaf) | CC BY 3.0, na primeira página do PDF e na página da editora.                                                                                                                             | `permitida`       | nenhuma                                           | **Elegível** para incorporação, com atribuição                                   | L   |
+| **Arquivos ASCII do AMDC** (NUBASE2020 e tabelas AME2020)                                              | A página do AMDC não declara licença e pede que se citem "os artigos originais", não os arquivos.                                                                                        | `nao-esclarecida` | nenhuma                                           | Consulta e citação; **aguarda esclarecimento**                                   | L   |
+| **CIAAW** (site, tabelas de pesos atômicos e abundâncias)                                              | Impressum: © CIAAW e IUPAC; uso livre para fins educacionais; reprodução e distribuição eletrônica sem permissão formal, com atribuição; uso comercial exige contato com o Secretariado. | `condicional`     | `uso-educacional`, `contato-comercial`            | Sem incorporação automática; **aguarda esclarecimento**                          | L   |
+| **ENSDF** (NNDC/IAEA)                                                                                  | Foram identificadas políticas de **citação** e de **apresentação**; nenhuma licença ou autorização de redistribuição. Os Termos de Uso gerais da IAEA só foram lidos por trechos.        | `nao-esclarecida` | nenhuma                                           | Consulta e citação; **aguarda esclarecimento**                                   | L/E |
+| **NIST Atomic Spectra Database** (SRD 78, versão 5.12)                                                 | A página oficial declara os dados protegidos por direitos autorais do Departamento de Comércio dos EUA, "all rights reserved". Nenhuma autorização de redistribuição foi localizada.     | `nao-esclarecida` | nenhuma                                           | Consulta e citação; **aguarda esclarecimento**                                   | L   |
+| **IUPAC Gold Book**                                                                                    | Indicada, por trechos indexados, como CC BY-SA 4.0 por termo, com licenciamento comercial à parte; **verificação direta pendente**.                                                      | `condicional`     | `compartilhamento-igual`, `contato-comercial`     | Apenas consulta e citação; **não incorporar por enquanto**                       | E   |
+| **IUPAC Red Book 2005**                                                                                | © IUPAC 2005, todos os direitos reservados; só "fair dealing"; a reprodução exige autorização escrita prévia (a página de direitos indica a Royal Society of Chemistry, editora).        | `condicional` ¹   | nenhuma estruturada (condição descrita em `note`) | Apenas consulta e citação bibliográfica; **sem reprodução de textos ou tabelas** | L   |
+| Relatórios técnicos IUPAC/CIAAW na _Pure Appl. Chem._ (ex.: Prohaska et al. 2022) ²                    | CC BY-NC-ND 4.0.                                                                                                                                                                         | `condicional`     | `nao-comercial`, `sem-derivados`                  | Apenas consulta e citação                                                        | L   |
+| Alvarez (2013), raios de van der Waals, _Dalton Trans._ 42, 8617 (doi:10.1039/C3DT50599E)              | CC BY-NC 3.0 Unported.                                                                                                                                                                   | `condicional`     | `nao-comercial`                                   | Apenas consulta e citação; **valores não incorporados**                          | L   |
+| Bondi (1964), raios de van der Waals, _J. Phys. Chem._ 68, 441 (doi:10.1021/j100785a001) ²             | Licença **individual** não verificada (editora: ACS).                                                                                                                                    | `nao-esclarecida` | nenhuma                                           | Consulta e citação; **aguarda verificação individual**                           | N   |
+| Mantina et al. (2009), raios de van der Waals, _J. Phys. Chem. A_ 113, 5806 (doi:10.1021/jp8111556) ²  | Licença **individual** não verificada (editora: ACS).                                                                                                                                    | `nao-esclarecida` | nenhuma                                           | Consulta e citação; **aguarda verificação individual**                           | N   |
+| Cordero et al. (2008), raios covalentes, _Dalton Trans._, 2832 (doi:10.1039/b801115j) ²                | Licença **individual** não verificada (editora: RSC).                                                                                                                                    | `nao-esclarecida` | nenhuma                                           | Consulta e citação; **aguarda verificação individual**                           | N   |
+
+¹ Estado aprovado: `condicional`, porque a exigência de autorização prévia não equivale necessariamente a uma proibição absoluta de redistribuição. Os valores de `restrictions` não têm um item correspondente, e nenhuma restrição estruturada foi inventada; a condição é descrita em `note`: "a reprodução de conteúdo protegido exige autorização escrita prévia da detentora dos direitos". Situação no Elementum: apenas consulta e citação bibliográfica, sem reprodução de textos ou tabelas.
+
+² Linhas acrescentadas por aplicação das regras aprovadas (NC/ND e `nao-esclarecida`) e mantidas por decisão do mantenedor. As três publicações de raios (Bondi, Mantina e Cordero) são tratadas **individualmente**: têm editoras e termos próprios, e nenhuma licença comum pode ser presumida.
+
+**Cuidados na leitura da matriz:**
+
+- A CC BY 3.0 do artigo NUBASE2020 e a do artigo AME2020 (II) valem para esses artigos e **não se estendem** a outras partes do AME2020 (como a parte I, cuja licença não foi verificada diretamente) nem aos arquivos ASCII ou externos do AMDC.
+- No CIAAW, o alcance exato dos termos sobre todas as tabelas e conjuntos de dados precisa ser esclarecido; por isso a fonte é `condicional` e **sem incorporação automática**.
+- O NIST ASD é `nao-esclarecida`, e **não** `nao-permitida`: a fonte declara direitos reservados, mas nenhuma proibição expressa de redistribuir valores foi localizada, nem autorização.
+
+### O que pode ser incorporado
+
+- **Elegíveis (com atribuição):** o conteúdo dos artigos NUBASE2020 e AME2020 (II), sob CC BY 3.0. **Elegível não significa incorporado:** nenhum dado foi coletado. Ao coletar, registram-se valores individuais com `locator`, sem copiar a tabela inteira.
+- **Apenas consulta e citação:** IUPAC Gold Book, IUPAC Red Book (citação bibliográfica, sem reprodução de textos ou tabelas), relatórios da _Pure Appl. Chem._ (CC BY-NC-ND) e Alvarez (2013).
+- **Aguardam esclarecimento (podem ser consultadas e citadas, não incorporadas):** arquivos ASCII do AMDC, CIAAW, ENSDF, NIST ASD e as licenças individuais, pendentes, de Bondi, Mantina e Cordero.
+
+### Atribuição exigida
+
+| Fonte                     | Condição de atribuição                                                                                                                                                                                  |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| NUBASE2020 e AME2020 (II) | CC BY 3.0: manter a atribuição aos autores, o título da obra, a citação do periódico e o DOI. O AMDC pede citar os artigos originais, e não os arquivos.                                                |
+| CIAAW                     | Reconhecimento da fonte "com referência completa"; o símbolo ©, o nome IUPAC ou CIAAW e o ano devem estar visíveis (impressum).                                                                         |
+| ENSDF                     | Orientação de **citação**, não licença: até 10 nuclídeos, citar a avaliação da cadeia de massa na _Nuclear Data Sheets_; acima disso, citar o banco com a data de consulta.                             |
+| NIST ASD                  | Citação recomendada: Kramida, A., Ralchenko, Yu., Reader, J. and NIST ASD Team (2024). _NIST Atomic Spectra Database_ (versão 5.12). doi:10.18434/T4W30F. O NIST pede que se credite o NIST como fonte. |
+
+### Esclarecimentos pendentes
+
+**Nenhum contato foi realizado.** Contatar ou não, e quando, é decisão do mantenedor. Os canais abaixo são institucionais; dados de pessoas não são registrados neste repositório. Enquanto não houver resposta formal, as fontes continuam como na matriz.
+
+| Instituição   | O que precisa ser esclarecido                                                                                     | Fontes afetadas               | Canal institucional identificado                                                                                                                                                   |
+| ------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **AMDC**      | Licença dos arquivos ASCII e permissão para redistribuir valores deles extraídos.                                 | Arquivos NUBASE2020 e AME2020 | Sites oficiais <http://amdc.impcas.ac.cn/> e <https://www-nds.iaea.org/amdc/>. **Contato específico não identificado na auditoria.**                                               |
+| **CIAAW**     | Alcance dos termos (uso educacional e distribuição eletrônica) sobre tabelas e dados; condições de uso comercial. | CIAAW                         | Secretariado do CIAAW, indicado no impressum: <https://www.ciaaw.org/impressum.htm>.                                                                                               |
+| **NNDC/IAEA** | Licença e condições de redistribuição do ENSDF.                                                                   | ENSDF                         | Páginas oficiais <https://www.nndc.bnl.gov/ensdf/> e da IAEA. **Contato específico não identificado na auditoria.**                                                                |
+| **NIST**      | Permissão para transcrever ou redistribuir valores do ASD (SRD 78) e termos de licença do programa SRD.           | NIST ASD                      | Suporte do ASD, indicado em <https://www.nist.gov/pml/atomic-spectra-database>. A página do programa SRD com os termos de licença **não carregou** (erro 404) durante a auditoria. |
+
+Depois de um esclarecimento formal, a decisão deve ser documentada e só então o registro da fonte (`redistribution`, `restrictions`) é atualizado.
+
+### Lacunas de evidência da auditoria
+
+O que não pôde ser registrado com segurança:
+
+- **Gold Book:** a licença (CC BY-SA 4.0) e a regra de licenciamento comercial foram indicadas por trechos indexados dos próprios termos, porque a leitura direta foi bloqueada; **verificação direta pendente**.
+- **Termos de Uso da IAEA:** consulta direta incompleta; as informações vêm de trechos indexados.
+- **AME2020 (I)** (doi:10.1088/1674-1137/abddb0): licença **não verificada diretamente**. **AME2020 (II):** CC BY 3.0 verificada diretamente, sem estender essa licença a outras partes ou arquivos.
+- **Arquivos ASCII do AMDC:** nenhuma licença declarada foi encontrada, e a redistribuição é `nao-esclarecida`; isso não prova que não exista licença.
+- **CIAAW:** o impressum não cita tabelas ou conjuntos de dados, e seu aviso de copyright (2007–2022) é anterior à tabela de 2024.
+- **ENSDF e NIST ASD:** os documentos de política localizados tratam de citação e apresentação; a página do programa SRD do NIST não carregou.
+- **Bondi, Mantina e Cordero:** licenças **individuais** pendentes; não se presume licença comum.
+- **Canais de contato** do AMDC e do NNDC/IAEA: não identificados.
+- **Red Book:** estado `condicional` aprovado; a exigência de autorização escrita prévia não foi interpretada como proibição absoluta, e os enums de `restrictions` não têm item correspondente (a condição fica em `note`).
+- Nada disto é aconselhamento jurídico. O direito sobre bases de dados e a diferença entre fatos e sua apresentação variam por jurisdição.
+
+### Registro em `references.json` (proposta; não implementado)
+
+**Estado atual:** nenhuma referência foi registrada em `references.json`, e a matriz acima é apenas documental; o teste do catálogo exige, por ora, o registro vazio. Na etapa de coleta, registrar primeiro as duas referências elegíveis (NUBASE2020 e AME2020 II), com `kind: artigo`, `usage: dados-incorporados` e `license` com `status: verificada`, `redistribution: permitida`, `name`, `termsUrl`, `attribution` e `checkedAt`. As demais fontes só entram como `usage: apenas-citacao`, com o estado de redistribuição e as restrições da matriz. Os campos devem ser coerentes com o schema (`redistribution` e `restrictions` da seção anterior), e `condicional` exige restrição ou nota (o Red Book, por exemplo, usa `note`).
 
 ## 9. Limitações da verificação científica
 
-Não foi possível ler diretamente o texto do Red Book 2005, o do Gold Book, o relatório de Scerri (2021) nem os artigos sobre química de elementos superpesados (acesso bloqueado ou arquivos ilegíveis). As afirmações que dependem deles estão marcadas como "fonte secundária". Itens sem confirmação em fonte primária:
+A auditoria da Etapa 2.3B.1 leu diretamente a seção IR-3.5 do Red Book 2005 (com busca no texto completo) e as passagens sobre pressão e estado padrão do Green Book, 3ª ed., a partir de texto extraído dos PDFs da IUPAC. Continuam sem leitura direta o Gold Book, o relatório de Scerri (2021) e parte dos artigos sobre química de elementos superpesados (acesso bloqueado ou restrito). As afirmações que dependem deles estão marcadas como "fonte secundária". Itens sem confirmação em fonte primária:
 
-- seções exatas do Red Book e o texto do Gold Book;
+- o texto do Gold Book (inclusive a definição de elemento de transição e os termos de licença);
 - conteúdo do relatório de Scerri;
 - a classificação individual de cada elemento de Z ≥ 99;
 - a contagem exata de isótopos naturais;
 - a data da adoção de 100 kPa como pressão padrão pela IUPAC (1982), que consta em trechos do Gold Book sem leitura direta;
-- a fonte e a licença dos raios de van der Waals (nenhum conjunto foi escolhido);
-- a licença e a citação do ENSDF e das demais bases.
+- a fonte e a licença dos raios de van der Waals (nenhum conjunto foi escolhido; as licenças individuais de Bondi, Mantina e Cordero estão pendentes);
+- as licenças e condições pendentes do AMDC (arquivos), do CIAAW (alcance), do ENSDF e do NIST ASD, e as demais lacunas de licenciamento (seção 8).
 
 Esses itens devem ser resolvidos na coleta de dados, antes de entrarem como fatos nos JSON.
 
@@ -295,3 +384,14 @@ Esses itens devem ser resolvidos na coleta de dados, antes de entrarem como fato
 - Cordero et al. (2008), Covalent radii revisited, _Dalton Trans._, <https://dx.doi.org/10.1039/b801115j> (metadados).
 - Wang et al. (2014), Identification of an iridium-containing compound with a formal oxidation state of IX, _Nature_ (resumos).
 - W3C, WCAG 2.2: critérios 1.4.1, 1.4.11 e 2.5.8 (lidos).
+
+### Fontes da auditoria de licenças (Etapa 2.3B.1)
+
+- CIAAW, impressum: <https://www.ciaaw.org/impressum.htm> (lido).
+- Kondev et al. (2021), NUBASE2020, página da editora: <https://iopscience.iop.org/article/10.1088/1674-1137/abddae> (lida); página do AMDC: <http://amdc.impcas.ac.cn/web/nubase_en.html> (lida).
+- Wang et al. (2021), AME2020 (II), página da editora: <https://iopscience.iop.org/article/10.1088/1674-1137/abddaf> (lida); PDF hospedado pela IAEA (lido).
+- ENSDF: <https://www.nndc.bnl.gov/ensdf/>, diretrizes de citação <https://www.nndc.bnl.gov/ensdf/citations.pdf> e políticas de apresentação <https://www.nndc.bnl.gov/nds/docs/NDSPolicies.pdf> (lidas). Termos de Uso da IAEA: <https://iaea.org/about/disclaimer> (só por trechos indexados).
+- NIST ASD: <https://www.nist.gov/pml/atomic-spectra-database>, histórico e citação <http://physics.nist.gov/PhysRefData/ASD/Html/verhist.shtml>, declarações de copyright <https://www.nist.gov/open/copyright-fair-use-and-licensing-statements-srd-data-software-and-technical-series-publications> (lidas).
+- IUPAC, _Nomenclature of Inorganic Chemistry_ (Red Book), Recomendações 2005, ISBN 0-85404-438-8 (PDF; seção IR-3.5 e página de direitos lidas, mais busca no texto completo). IUPAC, _Quantities, Units and Symbols in Physical Chemistry_ (Green Book), 3ª ed. (PDF; passagens sobre pressão e estado padrão lidas). Gold Book: <https://goldbook.iupac.org/> (só por trechos indexados; verificação direta pendente).
+- Prohaska et al. (2022), _Pure Appl. Chem._ 94, 573, doi:10.1515/pac-2019-0603 (primeiras páginas lidas em cópia de repositório).
+- Alvarez (2013), _Dalton Trans._ 42, 8617, doi:10.1039/C3DT50599E (lido em cópia de acesso aberto do repositório da Universitat de Barcelona).

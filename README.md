@@ -108,6 +108,8 @@ O catálogo é validado ao ser carregado: símbolo e número atômico precisam c
 
 A Wikipédia não pode ser citada. Dados de uma base científica só podem ser incorporados depois que a licença e as condições de atribuição forem verificadas e registradas na referência **e** a redistribuição for confirmada como permitida (`license.redistribution: permitida`). Fontes condicionais, com redistribuição não permitida ou não esclarecida podem ser citadas, mas não fornecem dados incorporados. Veja [docs/convencoes-cientificas.md](docs/convencoes-cientificas.md#8-licenças-e-atribuição-das-bases-científicas).
 
+A auditoria das bases candidatas está registrada nessa seção: hoje apenas o conteúdo dos artigos NUBASE2020 e AME2020 (parte II), sob CC BY 3.0, é elegível para incorporação; as demais fontes são apenas para consulta e citação ou aguardam esclarecimento. Elegível não significa incorporado: nenhum dado científico foi incorporado até o momento.
+
 ## Design
 
 Os tokens visuais (cores, tipografia, espaçamento, raios, sombras e movimento) ficam em [src/styles/tokens.css](src/styles/tokens.css). Cada família tem um token de cor próprio (`--color-family-<id>`) e um marcador geométrico exclusivo, para que a cor não seja o único meio de identificação. Estilos de componentes devem usar apenas esses tokens.
