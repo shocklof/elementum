@@ -106,7 +106,7 @@ O catálogo é validado ao ser carregado: símbolo e número atômico precisam c
 
 ### Referências e licenças
 
-A Wikipédia não pode ser citada. Dados de uma base científica só podem ser incorporados depois que a licença e as condições de atribuição forem verificadas e registradas na referência. Veja [docs/convencoes-cientificas.md](docs/convencoes-cientificas.md#8-licenças-e-atribuição-das-bases-científicas).
+A Wikipédia não pode ser citada. Dados de uma base científica só podem ser incorporados depois que a licença e as condições de atribuição forem verificadas e registradas na referência **e** a redistribuição for confirmada como permitida (`license.redistribution: permitida`). Fontes condicionais, com redistribuição não permitida ou não esclarecida podem ser citadas, mas não fornecem dados incorporados. Veja [docs/convencoes-cientificas.md](docs/convencoes-cientificas.md#8-licenças-e-atribuição-das-bases-científicas).
 
 ## Design
 
@@ -125,4 +125,4 @@ Os tokens visuais (cores, tipografia, espaçamento, raios, sombras e movimento) 
 
 O código-fonte original do Elementum está sob a [Licença MIT](LICENSE), Copyright (c) 2026 shocklof.
 
-Dados científicos de terceiros que venham a ser incorporados ao projeto podem ter licenças e condições próprias de uso, redistribuição e atribuição. A licença MIT **não** se aplica a eles, e a licença do código não substitui nem altera as condições de redistribuição das fontes científicas. Cada base é registrada, com sua licença verificada, antes de qualquer incorporação (veja [docs/convencoes-cientificas.md](docs/convencoes-cientificas.md#8-licenças-e-atribuição-das-bases-científicas)). Até o momento, nenhum dado científico foi incorporado.
+Dados científicos de terceiros que venham a ser incorporados ao projeto podem ter licenças e condições próprias de uso, redistribuição e atribuição. A licença MIT **não** se aplica a eles, e a licença do código não substitui nem altera as condições de redistribuição das fontes científicas. Cada base é registrada, com sua licença verificada e a redistribuição confirmada como permitida, antes de qualquer incorporação (veja [docs/convencoes-cientificas.md](docs/convencoes-cientificas.md#8-licenças-e-atribuição-das-bases-científicas)). Até o momento, nenhum dado científico foi incorporado.

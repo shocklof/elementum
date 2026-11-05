@@ -13,7 +13,7 @@ Data da consolidação: 2026-11-04 (Etapa 2.1 aprovada; implementação na Etapa
 1. **[CONVENÇÃO]** Todo dado científico cita ao menos uma referência do registro global (`src/data/references.json`), com o local exato na fonte quando possível.
 2. **[CONVENÇÃO]** A Wikipédia e outros projetos Wikimedia não podem ser citados como referência. O schema rejeita esses endereços.
 3. **[CONVENÇÃO]** Dados desconhecidos e não aplicáveis são sempre explicitados (`desconhecido`, `nao-aplicavel`). Nunca se usa `null` nem um valor inventado.
-4. **[CONVENÇÃO]** Nenhum dado de uma base científica é incorporado enquanto sua licença e as condições de atribuição não forem verificadas e registradas (ver seção 8).
+4. **[CONVENÇÃO]** Nenhum dado de uma base científica é incorporado enquanto sua licença e as condições de atribuição não forem verificadas e registradas **e** a redistribuição não for confirmada como permitida (ver seção 8). A licença do código (MIT) é independente das licenças dos dados.
 5. **[CONVENÇÃO]** Família química e posição na tabela são independentes (seções 2 e 3).
 
 ## 2. Classificação química (famílias)
@@ -132,7 +132,9 @@ Os valores são sempre armazenados nestas unidades. A conversão para exibição
 
 ### Condições de medição
 
-- **[CONVENÇÃO]** Estado físico e densidade usam, como referência, **298,15 K e 100 kPa** (`REFERENCE_CONDITIONS`). _Esta referência deve ser confirmada com a IUPAC na coleta de dados._ O campo `phase.conditions` é obrigatório; propriedades como densidade e pontos de fusão e ebulição aceitam `conditions` opcional.
+- **[CIÊNCIA]** **100 kPa (10⁵ Pa = 1 bar)** é a pressão padrão p° recomendada pela IUPAC (_Green Book_, 3ª ed.). _Verificação: texto lido no PDF da IUPAC._
+- **[CONVENÇÃO]** **298,15 K é uma convenção de referência do Elementum, não uma temperatura padrão universal da IUPAC.** A IUPAC não inclui a temperatura na definição de estado padrão (o _Green Book_ fala em "temperatura escolhida"); 298,15 K é a temperatura usual das tabelas termoquímicas. Não confundir com as "condições padrão para gases" (273,15 K e 10⁵ Pa), que o projeto não usa.
+- Estado físico e densidade usam, como referência, **298,15 K e 100 kPa** (`REFERENCE_CONDITIONS`). O campo `phase.conditions` é obrigatório; propriedades como densidade e pontos de fusão e ebulição aceitam `conditions` opcional.
 
 ### Massa atômica
 
@@ -154,7 +156,7 @@ Três formas, como o CIAAW e a IUPAC as apresentam:
 
 - **Tier 1** (campo obrigatório nos 118; o valor pode ser `desconhecido` ou `nao-aplicavel`): nomes (pt e en), classificação, massa atômica, configuração eletrônica, estado físico, densidade, pontos de fusão e ebulição, eletronegatividade de Pauling, raio covalente, raio de van der Waals, primeira energia de ionização, afinidade eletrônica, estados de oxidação, aparência, descoberta, etimologia, resumo, usos e isótopos.
 - **Tier 2** (opcional, apenas com dado confiável; campo `tier2`): estrutura cristalina, condutividade térmica (`W/(m·K)`), calor específico (`J/(g·K)`), calores de fusão e vaporização (`kJ/mol`) e abundância na crosta (`mg/kg`). As unidades do Tier 2 foram fixadas na Etapa 2.2 e podem ser revistas.
-- **Raios:** raio covalente e raio de van der Waals são propriedades separadas. **[CIÊNCIA]** Cordero et al. (2008) cobre raios covalentes só até Z=96; os demais ficam `desconhecido`. _Verificação: resumo lido._ A fonte do raio de van der Waals ainda precisa ser definida.
+- **Raios:** raio covalente e raio de van der Waals são propriedades separadas. **[CIÊNCIA]** Cordero et al. (2008) cobre raios covalentes só até Z=96; os demais ficam `desconhecido`. _Verificação: resumo lido._ O **raio de van der Waals continua Tier 1**, mas pode ser `desconhecido`. **[CONVENÇÃO]** Conjuntos de raios de fontes diferentes têm métodos e escalas incompatíveis (compilados, calculados ou derivados de estruturas cristalinas) e **não se misturam num mesmo campo**; valores ausentes não são preenchidos por interpolação sem justificativa científica documentada. A fonte do raio de van der Waals ainda precisa ser definida e depende de licença compatível (seção 8).
 - **Estados de oxidação:** vão de −5 a +9, cada um com `prevalence` (`comum`, `raro` ou `condicoes-extremas`). **[CIÊNCIA]** O estado +9 é conhecido só para o cátion [IrO₄]⁺ em fase gasosa (Wang et al., _Nature_ 2014), sem sal isolado; por isso é `condicoes-extremas`. Os limites do schema são faixas de sanidade; cada valor precisa de evidência.
 
 ## 5. Isótopos
@@ -198,7 +200,7 @@ O registro global fica em `src/data/references.json`. Cada referência tem:
 | `edition`, `retrievedAt`                                      | Edição consultada e data da consulta (obrigatória para bases e sites).              |
 | `tier`                                                        | `primaria`, `compilacao` ou `secundaria`.                                           |
 | `usage`                                                       | `dados-incorporados` ou `apenas-citacao`.                                           |
-| `license`                                                     | Verificação de licença (seção 8).                                                   |
+| `license`                                                     | Licença consultada, redistribuição e restrições (seção 8).                          |
 
 Cada dado cita `{ ref, locator? }`, com o local exato (tabela, página, entrada). O catálogo valida que toda citação aponta para uma referência registrada e avisa sobre referências registradas e nunca citadas.
 
@@ -213,12 +215,50 @@ Cada dado cita `{ ref, locator? }`, com o local exato (tabela, página, entrada)
 
 ## 8. Licenças e atribuição das bases científicas
 
-**[CONVENÇÃO]** Antes de incorporar dados de qualquer base, é obrigatório verificar e registrar a licença e as condições de atribuição. O schema impõe a regra:
+### Licença do código × licenças dos dados
 
-- Uma referência com `usage: dados-incorporados` só é aceita com `license.status: verificada`, que exige `name`, `termsUrl`, `attribution` e `checkedAt`.
-- Licença `pendente` bloqueia a incorporação. Referências `apenas-citacao` não exigem verificação.
+**[CONVENÇÃO]** O código-fonte original do Elementum está sob a licença MIT (arquivo `LICENSE`). A MIT **não** se aplica aos dados científicos de terceiros: cada fonte mantém suas próprias condições de uso, redistribuição e atribuição, e a licença do código não as substitui nem as altera.
 
-**Estado atual: nenhuma licença foi verificada.** Candidatas à coleta (todas com licença **pendente**):
+### Licença consultada × redistribuição permitida
+
+**[CONVENÇÃO]** Consultar a licença de uma fonte não autoriza a redistribuição de seus dados. São dois registros distintos em `license`:
+
+- `status`: se os termos foram consultados e registrados (`verificada`, `pendente` ou `nao-aplicavel`);
+- `redistribution`: se a redistribuição dos dados em JSON é permitida.
+
+Uma licença pode estar `verificada` e, ainda assim, não permitir a redistribuição (por exemplo, "todos os direitos reservados").
+
+**Estados de `redistribution`:**
+
+| Estado            | Significado                                                                                                                                                  |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `permitida`       | A redistribuição dos dados em JSON é permitida, sem restrições além da atribuição.                                                                           |
+| `condicional`     | Permitida apenas sob as restrições registradas em `restrictions` (ou descritas em `note`).                                                                   |
+| `nao-permitida`   | Proibida de forma expressa pelos termos da fonte.                                                                                                            |
+| `nao-esclarecida` | Nenhuma autorização foi encontrada, mas também não há proibição expressa. **Ausência de autorização não é proibição**, e também não autoriza a incorporação. |
+
+**Restrições (`restrictions`):**
+
+| Restrição                | Significado                                             |
+| ------------------------ | ------------------------------------------------------- |
+| `nao-comercial`          | Proíbe uso comercial (ex.: CC BY-NC).                   |
+| `sem-derivados`          | Proíbe obras derivadas (ex.: CC BY-ND).                 |
+| `compartilhamento-igual` | Derivados devem manter a mesma licença (ex.: CC BY-SA). |
+| `uso-educacional`        | Uso livre apenas para fins educacionais.                |
+| `contato-comercial`      | Uso comercial exige contato com o titular dos direitos. |
+
+A atribuição exigida pela fonte (`attribution`) não é uma restrição: continua obrigatória mesmo quando a redistribuição é `permitida`.
+
+### Regra de bloqueio
+
+O schema impõe as regras abaixo (`src/data/schema/reference.schema.ts`):
+
+- Uma referência com `usage: dados-incorporados` só é aceita com `license.status: verificada` (que exige `name`, `termsUrl`, `attribution` e `checkedAt`) **e** `license.redistribution: permitida`.
+- `condicional`, `nao-permitida`, `nao-esclarecida` e a ausência do campo são **rejeitados** para dados incorporados. Uma fonte condicional pode continuar registrada e ser citada (`usage: apenas-citacao`), mas não fornece dados incorporados sem uma **decisão específica documentada**; o schema não abre exceção automática.
+- Referências `apenas-citacao` não exigem verificação de licença e são aceitas em qualquer estado de redistribuição.
+- Coerência da licença: `permitida` não admite restrições (com restrições, use `condicional`); `condicional` exige ao menos uma restrição ou uma nota explicando a condição; as restrições não se repetem.
+
+**Estado atual:** nenhuma referência foi registrada em `references.json`, e o resultado da verificação de licenças das bases candidatas ainda não foi registrado no projeto. Todas as bases abaixo continuam com registro **pendente**:
 
 | Base                                                           | Uso previsto                         | Licença / atribuição |
 | -------------------------------------------------------------- | ------------------------------------ | -------------------- |
@@ -236,8 +276,8 @@ Não foi possível ler diretamente o texto do Red Book 2005, o do Gold Book, o r
 - conteúdo do relatório de Scerri;
 - a classificação individual de cada elemento de Z ≥ 99;
 - a contagem exata de isótopos naturais;
-- as condições de referência da IUPAC (298,15 K e 100 kPa são convenção do projeto);
-- a fonte do raio de van der Waals;
+- a data da adoção de 100 kPa como pressão padrão pela IUPAC (1982), que consta em trechos do Gold Book sem leitura direta;
+- a fonte e a licença dos raios de van der Waals (nenhum conjunto foi escolhido);
 - a licença e a citação do ENSDF e das demais bases.
 
 Esses itens devem ser resolvidos na coleta de dados, antes de entrarem como fatos nos JSON.

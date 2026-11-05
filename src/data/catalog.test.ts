@@ -192,6 +192,37 @@ describe('referências no catálogo', () => {
     expect(() => buildCatalog({}, [pending], rules)).toThrow(/licença verificada/);
   });
 
+  it('bloqueia dados incorporados de fonte com redistribuição condicional, mas aceita a mesma fonte só para citação', () => {
+    const license = {
+      status: 'verificada' as const,
+      redistribution: 'condicional' as const,
+      restrictions: ['nao-comercial' as const],
+      name: 'Licença sintética de teste',
+      termsUrl: 'https://example.org/termos',
+      attribution: 'Atribuição de teste.',
+      checkedAt: '2026-01-01',
+    };
+    const incorporated = makeFixtureReference({ usage: 'dados-incorporados', license });
+    expect(() => buildCatalog({}, [incorporated], rules)).toThrow(/decisão específica documentada/);
+    const citationOnly = makeFixtureReference({ usage: 'apenas-citacao', license });
+    expect(() => buildCatalog({}, [citationOnly], rules)).not.toThrow();
+  });
+
+  it('aceita dados incorporados de fonte com redistribuição permitida', () => {
+    const permitted = makeFixtureReference({
+      usage: 'dados-incorporados',
+      license: {
+        status: 'verificada',
+        redistribution: 'permitida',
+        name: 'Licença sintética de teste',
+        termsUrl: 'https://example.org/termos',
+        attribution: 'Atribuição de teste.',
+        checkedAt: '2026-01-01',
+      },
+    });
+    expect(buildCatalog({}, [permitted], rules).references).toHaveLength(1);
+  });
+
   it('coleta as citações de todo o elemento, inclusive as de isótopos e classificação', () => {
     const element = makeFixtureElement({
       classification: { status: 'predita', note: 'x', citations: [{ ref: 'outra-fonte' }] },
