@@ -147,3 +147,22 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+# Chaves e certificados privados (o repositório é público)
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+id_rsa*
+id_ed25519*
+
+# Configurações locais do Claude Code
+.claude/settings.local.json
+CLAUDE.local.md
+
+# Arquivos do macOS
+.DS_Store
+
+# Arquivos temporários do Vitest
+.vitest/
