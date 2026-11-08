@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { property } from './common';
+import { CITATION_ROLES, citationSchema, property } from './common';
 
 const density = property('g/cm³');
 const citations = [{ ref: 'fonte-de-teste' }];
@@ -84,5 +84,40 @@ describe('property (valor, desconhecido, não aplicável)', () => {
     });
     expect(positive.safeParse(value(300)).success).toBe(true);
     expect(positive.safeParse(value(-1)).success).toBe(false);
+  });
+});
+
+describe('citationSchema (papel da citação)', () => {
+  it('declara os dois papéis', () => {
+    expect([...CITATION_ROLES]).toEqual(['origem', 'apoio']);
+  });
+
+  it('aceita "origem", "apoio" e a ausência de papel (compatibilidade)', () => {
+    for (const role of ['origem', 'apoio', undefined]) {
+      expect(citationSchema.safeParse({ ref: 'fonte-de-teste', role }).success).toBe(true);
+    }
+    expect(citationSchema.safeParse({ ref: 'fonte-de-teste' }).success).toBe(true);
+  });
+
+  it('aceita papel junto com `locator`', () => {
+    const result = citationSchema.safeParse({
+      ref: 'fonte-de-teste',
+      role: 'origem',
+      locator: 'Tabela 1',
+    });
+    expect(result.success).toBe(true);
+  });
+
+  it('rejeita papéis desconhecidos ou vazios', () => {
+    for (const role of ['fonte', 'Origem', '', 'origem ']) {
+      expect(citationSchema.safeParse({ ref: 'fonte-de-teste', role }).success).toBe(false);
+    }
+  });
+
+  it('continua rejeitando campos desconhecidos e `ref` inválido', () => {
+    expect(citationSchema.safeParse({ ref: 'fonte-de-teste', papel: 'origem' }).success).toBe(
+      false,
+    );
+    expect(citationSchema.safeParse({ ref: 'Fonte Inválida', role: 'origem' }).success).toBe(false);
   });
 });

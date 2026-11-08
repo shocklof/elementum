@@ -38,9 +38,21 @@ export const slugSchema = z
  */
 export const provenanceSchema = z.enum(['experimental', 'calculado', 'estimado']);
 
-/** Citação rastreável: referência do registro global e, opcionalmente, o local exato. */
+/**
+ * Papel de uma citação:
+ * - `origem`: a fonte de onde o dado estruturado foi tomado. Só referências
+ *   `usage: dados-incorporados` podem ser origem;
+ * - `apoio`: fonte que corrobora, verifica ou fundamenta, sem ser a origem do dado.
+ *
+ * O papel é opcional no schema (compatibilidade), mas o catálogo o exige nas citações de
+ * blocos de dado estruturado com valor (ver src/data/citation-eligibility.ts).
+ */
+export const CITATION_ROLES = ['origem', 'apoio'] as const;
+
+/** Citação rastreável: referência do registro global, papel e, opcionalmente, o local exato. */
 export const citationSchema = z.strictObject({
   ref: slugSchema,
+  role: z.enum(CITATION_ROLES).optional(),
   /** Ex.: "Tabela 3", "p. 14-12", "entrada Z=26". */
   locator: z.string().min(1).optional(),
 });

@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import referencesRegistry from './references.json';
+import { checkCitationEligibility } from './citation-eligibility';
 import { FAMILY_IDS, FAMILY_MEMBERS, isFamilyId, type FamilyId, getFamily } from './families';
 import { ELEMENT_COUNT, LAYOUT } from './layout';
 import { elementSchema, type Element } from './schema/element.schema';
@@ -181,6 +182,12 @@ export function buildCatalog(
     if (!used.has(reference.id)) {
       warnings.push(`Referência "${reference.id}" registrada, mas nunca citada.`);
     }
+  }
+
+  /* Elegibilidade bibliográfica: papel das citações × `usage` da referência (após a existência) */
+  const usageByRef = new Map(references.map((reference) => [reference.id, reference.usage]));
+  for (const element of elements) {
+    issues.push(...checkCitationEligibility(element, usageByRef, element.symbol));
   }
 
   if (issues.length > 0) throw new CatalogError(issues);

@@ -10,7 +10,7 @@ Data da consolidação: 2026-11-04 (Etapa 2.1 aprovada; implementação na Etapa
 
 ## 1. Princípios
 
-1. **[CONVENÇÃO]** Todo dado científico cita ao menos uma referência do registro global (`src/data/references.json`), com o local exato na fonte quando possível.
+1. **[CONVENÇÃO]** Todo dado científico cita ao menos uma referência do registro global (`src/data/references.json`), com o local exato na fonte quando possível. Nos dados estruturados com valor, a citação tem papel explícito (`origem` ou `apoio`) e ao menos uma é `origem` incorporável (seção 6).
 2. **[CONVENÇÃO]** A Wikipédia e outros projetos Wikimedia não podem ser citados como referência. O schema rejeita esses endereços.
 3. **[CONVENÇÃO]** Dados desconhecidos e não aplicáveis são sempre explicitados (`desconhecido`, `nao-aplicavel`). Nunca se usa `null` nem um valor inventado.
 4. **[CONVENÇÃO]** Nenhum dado de uma base científica é incorporado enquanto sua licença e as condições de atribuição não forem verificadas e registradas **e** a redistribuição não for confirmada como permitida (ver seção 8). A licença do código (MIT) é independente das licenças dos dados.
@@ -204,7 +204,39 @@ O registro global fica em `src/data/references.json`. Cada referência tem:
 | `usage`                                                       | `dados-incorporados` ou `apenas-citacao`.                                           |
 | `license`                                                     | Licença consultada, redistribuição e restrições (seção 8).                          |
 
-Cada dado cita `{ ref, locator? }`, com o local exato (tabela, página, entrada). O catálogo valida que toda citação aponta para uma referência registrada e avisa sobre referências registradas e nunca citadas.
+Cada dado cita `{ ref, role?, locator? }`, com o local exato (tabela, página, entrada). O catálogo valida que toda citação aponta para uma referência registrada, avisa sobre referências registradas e nunca citadas e aplica a elegibilidade bibliográfica descrita abaixo.
+
+### Papéis das citações e elegibilidade bibliográfica
+
+**[CONVENÇÃO]** O campo `role` de uma citação é opcional no schema (compatibilidade), mas o catálogo o exige nos dados estruturados com valor. Há dois papéis:
+
+| Papel    | Significado                                                                                                                                                                |
+| -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `origem` | A fonte de onde o dado estruturado foi tomado. **Só referências `usage: dados-incorporados` podem ser origem.**                                                            |
+| `apoio`  | Fonte que corrobora, verifica ou fundamenta, sem ser a origem do dado (por exemplo, uma verificação cruzada). Aceita referências `dados-incorporados` ou `apenas-citacao`. |
+
+O critério de elegibilidade é `reference.usage`, e não `license.redistribution`. As regras de licenciamento continuam validadas no schema de referências (uma referência `dados-incorporados` exige licença verificada e redistribuição permitida) e **não são repetidas** na validação das citações.
+
+**Regras por categoria:**
+
+| Categoria (caminhos)                                                                                                                                                                                                                                                                                                                                                                                  | Papel                     | Regras                                                                                                                                                                   |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Dado estruturado com valor:** `atomicMass`; `electronConfiguration`, `phase`, `physical.*`, `chemical.*` (inclui `oxidationStates`) e `tier2.*` no estado `valor`; no isótopo, `atomicMass`, `halfLife` (`valor` ou `estavel`) e `abundance`; as citações do próprio isótopo (cobrem `massNumber`, `isomer`, `origin`, `selection`, `decayModes` e `spinParity`); `discovery` (ano e descobridores) | Explícito em toda citação | Ao menos uma `origem`; toda `origem` é `dados-incorporados`; `apoio` livre; múltiplas origens permitidas; bloco só de `apoio` é rejeitado; citação sem papel é rejeitada |
+| **Estado `desconhecido` ou `nao-aplicavel`**                                                                                                                                                                                                                                                                                                                                                          | Opcional                  | Citações opcionais, como justificativa; podem ser `apenas-citacao`; `origem` não se aplica (não há valor incorporado); aceita `apoio` ou nenhum papel                    |
+| **Conteúdo autoral:** `appearance`, `etymology`, `summary`, `uses[]` e `classification`                                                                                                                                                                                                                                                                                                               | Não exigido               | Qualquer `usage`; se houver papel, só `apoio`; nunca `origem`                                                                                                            |
+| `names`, `symbol`, `atomicNumber`, `family` e layout                                                                                                                                                                                                                                                                                                                                                  | Sem citações              | Regras inalteradas                                                                                                                                                       |
+
+**Origem de dados × fundamentação autoral.** Uma _origem_ é a fonte de onde um valor estruturado é tomado para o JSON; por isso exige uma fonte incorporável. A _fundamentação autoral_ é a base bibliográfica de um texto ou de um juízo escrito pelo projeto (descrição, etimologia, classificação); pode citar uma fonte `apenas-citacao`, e isso não autoriza copiar texto nem tabelas dessa fonte. A elegibilidade bibliográfica verifica o enquadramento da fonte; **não** mede a validade científica do conteúdo nem a autoria.
+
+**Como a validação funciona.** Ela roda em `buildCatalog`, depois da checagem de existência das referências. O percurso (`src/data/citation-eligibility.ts`) preserva o caminho completo de cada bloco de citações, e a tabela `CITATION_PATH_CATEGORIES` classifica cada caminho como dado, estado (valor ou justificativa) ou conteúdo autoral. As mensagens de erro trazem o elemento, o caminho, a referência, o papel e o `usage` encontrado. **Falha segura:** um caminho com `citations` que não esteja na tabela é um erro, nunca é presumido como conteúdo autoral. Testes comparam a tabela, nos dois sentidos, com os caminhos `citations` do próprio schema e de um elemento sintético completo, de modo que um campo novo com citações não escapa da validação.
+
+**Limitações (fatos sobre a validação atual):**
+
+- **Textos livres e notas.** Não há detecção de números ou afirmações factuais dentro de textos autorais nem de campos `note` sem citações próprias (por exemplo, notas de estados de oxidação, de decaimento e de condições, e a nota da classificação). Dados ou afirmações reproduzidos de uma fonte em texto ou nota continuam sujeitos à **política editorial** e à atribuição adequada; não há heurística automática.
+- **Proveniência transitiva.** A validação não verifica se uma fonte incorporável compilou dados de outra com licença diferente. É uma questão editorial e jurídica, fora do alcance do código.
+- **Intenção declarada.** `role: origem` declara que o valor veio daquela fonte; a validação não confere isso. A responsabilidade editorial por reproduzir apenas dados rastreáveis, sem copiar tabelas inteiras, permanece com o mantenedor.
+- **Onde roda.** A regra é aplicada no catálogo. O `elementSchema` usado isoladamente (fora de `buildCatalog`) não a aplica.
+- **`locator`.** Continua texto livre.
 
 ## 7. Decisões de interface (a implementar nas próximas etapas)
 
@@ -373,7 +405,7 @@ Nas duas: `kind: artigo`, `tier: compilacao`, `usage: dados-incorporados`, `publ
 
 **Convenção de `locator`:** o `locator` é texto livre, como no schema atual (só se exige que não seja vazio); o schema não o estrutura. Recomenda-se uma descrição precisa o bastante para localizar o valor na fonte, com o que for aplicável: tabela e seu número; página ou identificador da página; entrada, linha ou seção; e a legenda ou o contexto necessário. Formato sugerido: `Tabela <número>; página <identificador>; entrada <nuclídeo ou linha>`.
 
-**Próximos registros:** as demais fontes da matriz só entram quando forem citadas, como `usage: apenas-citacao`, com o estado de redistribuição e as restrições da matriz; `condicional` exige restrição ou nota (o Red Book, por exemplo, usa `note`). A proteção do catálogo contra o uso, como fonte de valores, de referências não incorporáveis ainda **não está implementada** e fica para a Etapa 2.3C.3.
+**Próximos registros:** as demais fontes da matriz só entram quando forem citadas, como `usage: apenas-citacao`, com o estado de redistribuição e as restrições da matriz; `condicional` exige restrição ou nota (o Red Book, por exemplo, usa `note`). A proteção do catálogo contra o uso, como origem de dados, de referências não incorporáveis foi implementada na Etapa 2.3C.3 (veja "Papéis das citações e elegibilidade bibliográfica", na seção 6).
 
 ## 9. Limitações da verificação científica
 

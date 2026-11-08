@@ -95,7 +95,7 @@ Família química e posição na tabela são independentes. A posição (grupo, 
 O schema do elemento está em [src/data/schema/element.schema.ts](src/data/schema/element.schema.ts). Principais regras:
 
 - **Estados de cada dado:** `valor`, `desconhecido` ou `nao-aplicavel`. Valores têm proveniência (`experimental`, `calculado` ou `estimado`), unidade padronizada, condições de medição e citações.
-- **Rastreabilidade:** cada propriedade cita `{ ref, locator? }`, apontando para o registro global em [src/data/references.json](src/data/references.json).
+- **Rastreabilidade:** cada propriedade cita `{ ref, role?, locator? }`, apontando para o registro global em [src/data/references.json](src/data/references.json). Nos dados estruturados, ao menos uma citação é `origem` e só referências `dados-incorporados` podem ser origem; o `apoio` e os textos autorais aceitam também referências apenas para citação (veja [a seção 6 da documentação](docs/convencoes-cientificas.md#papéis-das-citações-e-elegibilidade-bibliográfica)).
 - **Massa atômica** em três formas: valor, intervalo ou número de massa.
 - **Configuração eletrônica** por subcamadas; camadas e strings são derivadas em [src/data/derive.ts](src/data/derive.ts).
 - **Isótopos:** todos os naturais conhecidos (primordiais, de cadeias de decaimento e cosmogênicos), sem limite de quantidade; elementos sem isótopos naturais têm até três artificiais representativos. O de maior meia-vida confirmada sempre é incluído.
