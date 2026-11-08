@@ -1,1 +1,46 @@
-[]
+[
+  {
+    "id": "nubase2020-artigo",
+    "kind": "artigo",
+    "title": "The NUBASE2020 evaluation of nuclear physics properties",
+    "authors": ["F.G. Kondev", "M. Wang", "W.J. Huang", "S. Naimi", "G. Audi"],
+    "publisher": "IOP Publishing",
+    "year": 2021,
+    "doi": "10.1088/1674-1137/abddae",
+    "url": "https://iopscience.iop.org/article/10.1088/1674-1137/abddae",
+    "edition": "NUBASE2020",
+    "tier": "compilacao",
+    "usage": "dados-incorporados",
+    "license": {
+      "status": "verificada",
+      "redistribution": "permitida",
+      "name": "CC BY 3.0",
+      "termsUrl": "https://creativecommons.org/licenses/by/3.0/",
+      "attribution": "F.G. Kondev, M. Wang, W.J. Huang, S. Naimi, G. Audi. The NUBASE2020 evaluation of nuclear physics properties. Chinese Physics C, vol. 45, n. 3, artigo 030001, 2021. DOI: 10.1088/1674-1137/abddae. Licença CC BY 3.0 (https://creativecommons.org/licenses/by/3.0/). Modificações feitas pelo Elementum nos dados devem ser identificadas.",
+      "checkedAt": "2026-11-07",
+      "note": "© 2021 Chinese Physical Society, Institute of High Energy Physics of the Chinese Academy of Sciences, Institute of Modern Physics of the Chinese Academy of Sciences e IOP Publishing Ltd. A licença CC BY 3.0 corresponde ao artigo publicado: não se estende aos arquivos ASCII do AMDC nem a outras publicações relacionadas. A cópia do PDF hospedada pela IAEA não traz a frase de licença; ela consta na página da editora."
+    }
+  },
+  {
+    "id": "ame2020-ii-artigo",
+    "kind": "artigo",
+    "title": "The AME 2020 atomic mass evaluation (II). Tables, graphs and references",
+    "authors": ["Meng Wang", "W.J. Huang", "F.G. Kondev", "G. Audi", "S. Naimi"],
+    "publisher": "IOP Publishing",
+    "year": 2021,
+    "doi": "10.1088/1674-1137/abddaf",
+    "url": "https://iopscience.iop.org/article/10.1088/1674-1137/abddaf",
+    "edition": "AME2020",
+    "tier": "compilacao",
+    "usage": "dados-incorporados",
+    "license": {
+      "status": "verificada",
+      "redistribution": "permitida",
+      "name": "CC BY 3.0",
+      "termsUrl": "https://creativecommons.org/licenses/by/3.0/",
+      "attribution": "Meng Wang, W.J. Huang, F.G. Kondev, G. Audi, S. Naimi. The AME 2020 atomic mass evaluation (II). Tables, graphs and references. Chinese Physics C, vol. 45, n. 3, artigo 030003, 2021. DOI: 10.1088/1674-1137/abddaf. Licença CC BY 3.0 (https://creativecommons.org/licenses/by/3.0/). Modificações feitas pelo Elementum nos dados devem ser identificadas.",
+      "checkedAt": "2026-11-07",
+      "note": "© 2021 Chinese Physical Society, Institute of High Energy Physics of the Chinese Academy of Sciences, Institute of Modern Physics of the Chinese Academy of Sciences e IOP Publishing Ltd. A licença CC BY 3.0 corresponde à parte II (Tables, graphs and references): não se estende à parte I (AME2020 I), aos arquivos ASCII do AMDC nem a outras publicações relacionadas."
+    }
+  }
+]

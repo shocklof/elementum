@@ -67,9 +67,19 @@ describe('arquivos de dados por família', () => {
     expect(Array.isArray(catalog.references)).toBe(true);
   });
 
-  it('o catálogo real ainda não contém elementos cadastrados (Etapa 2.2 é só infraestrutura)', () => {
+  it('o catálogo real tem as duas referências iniciais e nenhum elemento cadastrado', () => {
     expect(catalog.elements).toHaveLength(0);
-    expect(catalog.references).toHaveLength(0);
+    expect(catalog.references.map((reference) => reference.id).sort()).toEqual([
+      'ame2020-ii-artigo',
+      'nubase2020-artigo',
+    ]);
+  });
+
+  it('as duas referências do catálogo real ainda não foram citadas por nenhum elemento', () => {
+    expect([...catalog.warnings].sort()).toEqual([
+      'Referência "ame2020-ii-artigo" registrada, mas nunca citada.',
+      'Referência "nubase2020-artigo" registrada, mas nunca citada.',
+    ]);
   });
 });
 

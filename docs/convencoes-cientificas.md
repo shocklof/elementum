@@ -353,9 +353,27 @@ O que não pôde ser registrado com segurança:
 - **Red Book:** estado `condicional` aprovado; a exigência de autorização escrita prévia não foi interpretada como proibição absoluta, e os enums de `restrictions` não têm item correspondente (a condição fica em `note`).
 - Nada disto é aconselhamento jurídico. O direito sobre bases de dados e a diferença entre fatos e sua apresentação variam por jurisdição.
 
-### Registro em `references.json` (proposta; não implementado)
+### Registro em `references.json`
 
-**Estado atual:** nenhuma referência foi registrada em `references.json`, e a matriz acima é apenas documental; o teste do catálogo exige, por ora, o registro vazio. Na etapa de coleta, registrar primeiro as duas referências elegíveis (NUBASE2020 e AME2020 II), com `kind: artigo`, `usage: dados-incorporados` e `license` com `status: verificada`, `redistribution: permitida`, `name`, `termsUrl`, `attribution` e `checkedAt`. As demais fontes só entram como `usage: apenas-citacao`, com o estado de redistribuição e as restrições da matriz. Os campos devem ser coerentes com o schema (`redistribution` e `restrictions` da seção anterior), e `condicional` exige restrição ou nota (o Red Book, por exemplo, usa `note`).
+**Estado atual (Etapa 2.3C.2):** o registro contém **duas referências**, ambas artigos de acesso aberto sob CC BY 3.0. Duas referências foram cadastradas, mas **nenhum dado de elemento foi incorporado**: os JSON de famílias continuam vazios, e as referências ainda não são citadas por nenhum elemento (o catálogo emite dois avisos "registrada, mas nunca citada").
+
+| `id`                | Obra                                                                        | DOI                        |
+| ------------------- | --------------------------------------------------------------------------- | -------------------------- |
+| `nubase2020-artigo` | NUBASE2020 (Kondev et al., _Chin. Phys. C_ 45(3), artigo 030001, 2021)      | `10.1088/1674-1137/abddae` |
+| `ame2020-ii-artigo` | AME2020, parte II (Wang et al., _Chin. Phys. C_ 45(3), artigo 030003, 2021) | `10.1088/1674-1137/abddaf` |
+
+Nas duas: `kind: artigo`, `tier: compilacao`, `usage: dados-incorporados`, `publisher: IOP Publishing`, e `license` com `status: verificada`, `redistribution: permitida` (sem `restrictions`), `name: CC BY 3.0`, `termsUrl`, `attribution` (referência bibliográfica completa, link da licença e a exigência de identificar modificações), `checkedAt: 2026-11-07` e `note` (copyright e escopo da licença).
+
+- **Verificação de 2026-11-07:** nas páginas da editora (IOPscience) foram lidos a licença, o acesso aberto e o copyright, que coincidem com o registro. O link da licença nas páginas é `http://creativecommons.org/licenses/by/3.0`; o registro usa a mesma licença em HTTPS (`https://creativecommons.org/licenses/by/3.0/`).
+- **Autores:** os nomes seguem as formas publicadas em cada artigo (por exemplo, "M. Wang" no NUBASE2020 e "Meng Wang" no AME2020 II).
+- **Escopo individual:** a autorização **não se estende** aos arquivos ASCII do AMDC, ao AME2020 (parte I) nem a outras publicações relacionadas; as notas das duas referências registram isso.
+- **Trava de política:** `src/data/references.registry.test.ts` falha se qualquer outra referência for `dados-incorporados`. Incluir uma nova fonte exige atualizar esse teste e a política desta seção de forma deliberada.
+
+**Convenção de identificação (`id`):** `<fonte>-<tipo>`, em kebab-case (por exemplo, `nubase2020-artigo`), em que o tipo corresponde ao `kind` da referência. Uma publicação e um arquivo de dados da mesma fonte são referências distintas, com `id` distintos. Os `id` são **imutáveis**: um `id` nunca é reaproveitado com outro significado. Uma nova edição de uma fonte recebe um novo `id`, e a anterior permanece registrada, para não perder a rastreabilidade das citações existentes.
+
+**Convenção de `locator`:** o `locator` é texto livre, como no schema atual (só se exige que não seja vazio); o schema não o estrutura. Recomenda-se uma descrição precisa o bastante para localizar o valor na fonte, com o que for aplicável: tabela e seu número; página ou identificador da página; entrada, linha ou seção; e a legenda ou o contexto necessário. Formato sugerido: `Tabela <número>; página <identificador>; entrada <nuclídeo ou linha>`.
+
+**Próximos registros:** as demais fontes da matriz só entram quando forem citadas, como `usage: apenas-citacao`, com o estado de redistribuição e as restrições da matriz; `condicional` exige restrição ou nota (o Red Book, por exemplo, usa `note`). A proteção do catálogo contra o uso, como fonte de valores, de referências não incorporáveis ainda **não está implementada** e fica para a Etapa 2.3C.3.
 
 ## 9. Limitações da verificação científica
 
